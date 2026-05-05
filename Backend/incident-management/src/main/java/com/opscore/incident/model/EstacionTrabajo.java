@@ -7,20 +7,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "checklists")
+@Table(name = "estaciones_trabajo")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Checklist {
+public class EstacionTrabajo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String nombre; // Ej: Prensa Hidráulica 01
+    private String codigo; // Ej: PH-01
 
-    @ManyToOne
-    @JoinColumn(name = "incidente_id")
-    private Incidente incidente;
-
-    private String items; // se puede manejar como JSON o lista serializada
-    private Boolean cumplido;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "area_id")
+    private Area area;
 }

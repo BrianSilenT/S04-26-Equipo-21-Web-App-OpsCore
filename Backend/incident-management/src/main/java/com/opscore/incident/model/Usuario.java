@@ -9,22 +9,22 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "usuarios")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nombre;
 
     @Column(unique = true)
-    private String numeroReloj; // o idEmpresa
+    private String numeroReloj;
 
     @Enumerated(EnumType.STRING)
-    private Rol rol; // OPERADOR, SUPERVISOR, TECNICO, MANAGER
+    private Rol rol;
 
-    private String password; // requerido para supervisor, técnico, manager
+    private String password;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "area_id")
+    private Area area; // Área asignada para técnicos/supervisores
 }

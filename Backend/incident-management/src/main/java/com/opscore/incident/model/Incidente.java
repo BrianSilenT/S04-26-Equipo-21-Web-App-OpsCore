@@ -12,27 +12,40 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "incidentes")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class Incidente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String tipo;
-    private String area;
-    private String descripcion;
-    private LocalDateTime fechaReporte;
-
-    @Enumerated(EnumType.STRING)
-    private EstadoIncidente estado; // ABIERTO, EN_PROCESO, CERRADO
-
-    @Enumerated(EnumType.STRING)
-    private Prioridad prioridad; // NORMAL, CRITICO
+    @ManyToOne
+    @JoinColumn(name = "estacion_id")
+    private EstacionTrabajo estacion;
 
     @ManyToOne
-    @JoinColumn(name = "operador_id")
+    @JoinColumn(name = "reportado_por_id")
     private Usuario operador;
+
+    @ManyToOne
+    @JoinColumn(name = "tecnico_asignado_id")
+    private Usuario tecnico;
+
+    private String descripcion;
+    private LocalDateTime fechaReporte;
+    private LocalDateTime fechaCierre;
+
+    @Enumerated(EnumType.STRING)
+    private EstadoIncidente estado;
+
+    @Enumerated(EnumType.STRING)
+    private Prioridad prioridad;
+
+    @Column(columnDefinition = "TEXT")
+    private String solucionTecnica;
+
+    @PrePersist
+    protected void onCreate() {
+        this.fechaReporte = LocalDateTime.now();
+        if(this.estado == null) this.estado = EstadoIncidente.ABIERTO;
+    }
 }

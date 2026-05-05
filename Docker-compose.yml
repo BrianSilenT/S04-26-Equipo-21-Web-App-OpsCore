@@ -1,0 +1,18 @@
+services:
+  # Servicio de Base de Datos
+  db:
+    image: postgres:15-alpine
+    container_name: opscore-db
+    restart: always
+    environment:
+      - POSTGRES_DB=opscore_db
+      - POSTGRES_USER=brian_dev
+      - POSTGRES_PASSWORD=opscore_pass
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+# Definición del volumen para que los datos sean persistentes
+volumes:
+  postgres_data:
