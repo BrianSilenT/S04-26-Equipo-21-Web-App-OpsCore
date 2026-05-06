@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { UiPage } from "../../pages/UiPage";
+import { UIPage } from "../../pages/UiPage";
 
 export const router = createBrowserRouter([
   {
@@ -8,6 +8,6 @@ export const router = createBrowserRouter([
   },
   {
     path: "/ui",
-    element: <UiPage />,
+    element: <UIPage />,
   },
 ]);
