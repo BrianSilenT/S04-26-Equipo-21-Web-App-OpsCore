@@ -1,5 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { UiPage } from "../../pages/UiPage";
+import { UIPage } from "../../pages/UiPage";
+import { LoginPage } from "@/pages/LoginPage";
+import { MobileIncidentReportPage } from "@/pages/MobileIncidentReportPage";
 
 export const router = createBrowserRouter([
   {
@@ -8,6 +10,14 @@ export const router = createBrowserRouter([
   },
   {
     path: "/ui",
-    element: <UiPage />,
+    element: <UIPage />,
+  },
+  {
+    path: "/auth",
+    element: <LoginPage />,
+  },
+  {
+    path: "/check",
+    element: <MobileIncidentReportPage />,
   },
 ]);

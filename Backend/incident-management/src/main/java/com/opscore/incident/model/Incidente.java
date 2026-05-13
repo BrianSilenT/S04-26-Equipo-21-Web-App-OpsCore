@@ -3,36 +3,56 @@ package com.opscore.incident.model;
 import com.opscore.incident.enums.EstadoIncidente;
 import com.opscore.incident.enums.Prioridad;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "incidentes")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter // Cambiamos @Data por Getter/Setter para evitar problemas con Lazy Loading
+@NoArgsConstructor @AllArgsConstructor
 @Builder
-public class Incidente {
+public class Incidente extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String tipo;
-    private String area;
+    @Column(nullable = false)
+    private String titulo; // Añadimos un título corto para identificar el ticket
+
+    @Column(columnDefinition = "TEXT")
     private String descripcion;
-    private LocalDateTime fechaReporte;
 
     @Enumerated(EnumType.STRING)
-    private EstadoIncidente estado; // ABIERTO, EN_PROCESO, CERRADO
+    private EstadoIncidente estado;
 
     @Enumerated(EnumType.STRING)
-    private Prioridad prioridad; // NORMAL, CRITICO
+    private Prioridad prioridad;
 
-    @ManyToOne
-    @JoinColumn(name = "operador_id")
+    @Column(columnDefinition = "TEXT")
+    private String solucionTecnica;
+
+    private LocalDateTime fechaCierre; // Mantenemos esta para el cierre manual
+
+    // --- RELACIONES OPTIMIZADAS ---
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "area_id")
+    private Area area; // Nueva relación normalizada
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "estacion_id")
+    private EstacionTrabajo estacion;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reportado_por_id")
     private Usuario operador;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tecnico_asignado_id")
+    private Usuario tecnico;
+
+    // Nota: El estado inicial se puede manejar mejor en la capa de Servicio
+    // o dejando el default en el constructor.
 }

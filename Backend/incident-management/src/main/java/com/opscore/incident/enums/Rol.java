@@ -4,5 +4,5 @@ public enum Rol {
     OPERADOR,
     SUPERVISOR,
     TECNICO,
-    MANAGER
+    GERENTE
 }

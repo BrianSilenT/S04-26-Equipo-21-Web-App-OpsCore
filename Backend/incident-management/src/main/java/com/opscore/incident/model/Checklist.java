@@ -1,26 +1,27 @@
 package com.opscore.incident.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "checklists")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Checklist {
+public class Checklist extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "incidente_id")
-    private Incidente incidente;
+    private String titulo;
 
-    private String items; // se puede manejar como JSON o lista serializada
-    private Boolean cumplido;
+    @OneToMany(mappedBy = "checklist", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<ChecklistItem> items = new ArrayList<>();
 }
